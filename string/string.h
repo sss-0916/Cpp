@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <assert.h>
 #include <string.h>
@@ -43,7 +41,6 @@ class String{
 		~String(){
 			if(_str){
 				delete[] _str;
-				_str = nullptr;
 				_size = 0;
 				_capacity = 0;
 			}
@@ -51,7 +48,7 @@ class String{
 
 		String(const String& s)
 			: _str(nullptr)
-			, _size(0)
+			, _size(0)  
 			, _capacity(0)
 		{
 			String temp(s.c_str());
@@ -71,19 +68,6 @@ class String{
 		void resize(size_t size, char ch = 0);
 
 	public:
-		String& operator+=(char ch);
-
-		String& operator+=(const char* str);
-
-		String operator+(char ch) const;
-
-		String operator+(const char* str) const;
-
-		char& operator[](size_t pos);
-
-		const char& operator[](size_t pos) const;
-
-	public:
 		String& insert(size_t pos, char ch);
 
 		String& insert(size_t pos, const char* str);
@@ -96,7 +80,20 @@ class String{
 
 		size_t find(char ch, size_t pos = 0) const;
 
-		size_t find(const char* str, size_t pos = 0) const;
+		size_t find(const char* str, size_t pos = 0) const ;
+
+	public:
+		String& operator+=(char ch);
+
+		String& operator+=(const char* str);
+
+		String operator+(char ch) const;
+
+		String operator+(const char* str) const;
+
+		char& operator[](size_t pos);
+
+		const char& operator[](size_t pos) const;
 
 	public:
 		bool operator>(const String& s) const;
@@ -120,14 +117,14 @@ class String{
 			return _capacity;
 		}
 
-		char* c_str() const{
-			return _str;
-		}
-
 		void swap(String& s){
 			std::swap(_str, s._str);
 			std::swap(_size, s._size);
 			std::swap(_capacity, s._capacity);
+		}
+
+		char* c_str() const{
+			return _str;
 		}
 
 	private:
@@ -139,3 +136,5 @@ class String{
 std::ostream& operator<<(std::ostream& _cout, const String& s);
 
 std::istream& operator>>(std::istream& _cin, String& s);
+
+void stringTest();

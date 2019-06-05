@@ -13,9 +13,8 @@ void String::reserve(size_t capacity){
 
 		if(_str){
 			strcpy(temp, _str);
+			delete[] _str;
 		}
-
-		delete[] _str;
 
 		_str = temp;
 		_capacity = capacity - 1;
@@ -26,10 +25,18 @@ void String::resize(size_t size, char ch){
 	if(size <= _size){
 		_size = size;
 	}
+	else if(size <= _capacity){
+		for(size_t i = _size; i < size; ++i){
+			_str[i] = ch;
+		}
+
+		_size = size;
+	}
 	else{
 		reserve(size);
-
-		memset(_str + _size, ch, size - _size);
+		for(size_t i = _size; i < size; ++i){
+			_str[i] = ch;
+		}
 
 		_size = size;
 	}
@@ -41,6 +48,7 @@ String& String::insert(size_t pos, char ch){
 	assert(pos <= _size);
 
 	++_size;
+
 	if(_size > _capacity){
 		reserve(_capacity * 2);
 	}
@@ -58,18 +66,14 @@ String& String::insert(size_t pos, const char* str){
 	assert(pos <= _size);
 
 	int len = strlen(str);
-
-	_size += len;
-
-	if(_size > _capacity){
-		reserve(_size);
+	if(_size + len > _capacity){
+		reserve(_size + len);
 	}
+	_size += len;
 
 	for(int i = _size; i >= (int)pos + len; --i){
 		_str[i] = _str[i - len];
 	}
-
-	strncpy(_str + pos, str, len);
 
 	return *this;
 }
@@ -89,21 +93,22 @@ String& String::append(const char* str){
 String& String::erase(size_t pos, size_t len){
 	assert(pos < _size);
 
-	if(len >= _size - pos - 1){
+	if(_size - pos <= len){
 		_size = pos;
 		_str[_size] = '\0';
 	}
 	else{
-		for(int i = pos; i < (int)_size; ++i){
-			_str[i] = _str[i + len];
+		for(int i = pos + len; i <= (int)_size; ++i){
+			_str[i - len] = _str[i];
 		}
+		_size -= len;
 	}
 
 	return *this;
 }
 
 size_t String::find(char ch, size_t pos) const{
-	for(int i = pos; i < (int)_size; ++i){
+	for(size_t i = pos; i < _size; ++i){
 		if(_str[i] == ch){
 			return i;
 		}
@@ -113,11 +118,7 @@ size_t String::find(char ch, size_t pos) const{
 }
 
 size_t String::find(const char* str, size_t pos) const{
-	char* temp = strstr(_str + pos, str);
-
-	if(!temp){
-		return -1;
-	}
+	const char* temp = strstr(_str + pos, str);
 
 	return temp - _str;
 }
@@ -205,6 +206,10 @@ std::ostream& operator<<(std::ostream& _cout, const String& s){
 }
 
 std::istream& operator>>(std::istream& _cin, String& s){
+	char* temp = new char[2048];
+
+	_cin >> temp;
+
 	if(s._str){
 		delete[] s._str;
 		s._str = nullptr;
@@ -212,17 +217,30 @@ std::istream& operator>>(std::istream& _cin, String& s){
 		s._capacity = 0;
 	}
 
-	char* temp = new char[2048];
-
-	_cin >> temp;
-
 	int len = strlen(temp);
-
 	s.reserve(len);
+	s._size = len;
 
 	strcpy(s._str, temp);
 
-	s._size = len;
+	delete[] temp;
+	temp = nullptr;
 
 	return _cin;
+}
+
+void stringTest(){
+	String s1("hello, world!");
+	String s2("hello, world!");
+
+	std::cin >> s1;
+
+	std::cout << s1;
+}
+
+int main(){
+
+	stringTest();
+
+	return 0;
 }
