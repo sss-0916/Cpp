@@ -1,9 +1,9 @@
-#include "iostream"
-#include "vector"
-#include "list"
-#include "algorithm"
-#include "functional"
-#include "iterator"
+#include <iostream>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <functional>
+#include <iterator>
 using namespace std;
 
 void print(int& ele)
@@ -20,25 +20,25 @@ int main()
 	cout << "v1: " << endl;
 	for_each(v1.begin(), v1.end(), print);
 	cout << endl;
-	//l2ÖÐµÄÔªËØ·Ö±ð³Ë-1
+	//l2ï¿½Ðµï¿½Ôªï¿½Ø·Ö±ï¿½ï¿½-1
 	transform(v1.begin(), v1.end(), back_inserter(l2), negate<int>());
 	cout << "l2: " << endl;
 	for_each(l2.begin(), l2.end(), print);
 	cout << endl;
-	//l2ÖÐµÄÔªËØ·Ö±ð³Ë10
+	//l2ï¿½Ðµï¿½Ôªï¿½Ø·Ö±ï¿½ï¿½10
 	transform(l2.begin(), l2.end(), l2.begin(), bind2nd(multiplies<int>(), 10));
 	cout << "l2 * 10: " << endl;
 	for_each(l2.begin(), l2.end(), print);
 	cout << endl;
-	//l2ÖÐÔªËØ³Ë-1£¬·´ÏòÊä³ö
+	//l2ï¿½ï¿½Ôªï¿½Ø³ï¿½-1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	cout << "l2(-): " << endl;
 	transform(l2.rbegin(), l2.rend(), ostream_iterator<int>(cout, ","), negate<int>());
 	cout << endl;
-	//l2³ýÒÔ2·´ÏòÊä³ö
+	//l2ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	cout << "list 12(/2, reverse_direction): " << endl;
 	transform(l2.rbegin(), l2.rend(), ostream_iterator<int>(cout, ", "), bind2nd(divides<int>(), 2));
 	cout << endl;
-	//ÒÔÉÏÊÇµÚÒ»ÖÖÓÃ·¨
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½Ò»ï¿½ï¿½ï¿½Ã·ï¿½
 	cout << "l2: " << endl;
 	for_each(l2.begin(), l2.end(), print);
 	cout << endl;
